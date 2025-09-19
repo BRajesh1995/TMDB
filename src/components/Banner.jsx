@@ -7,10 +7,13 @@ const Banner = () => {
   const [movies, setMovies] = useState([]);
   const [loader, setLoader] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
+  const TMDB_TRENDING_MOVIES_BASE_URL = import.meta.env.VITE_TRENDING_MOVIES_BASE_URL;
   useEffect(() => {
     try {
       setLoader(true);
-      const url = "https://api.themoviedb.org/3/trending/movie/day?api_key=332d46dfcdb857f90b23eb2fc61e0092";
+      const url = `${TMDB_TRENDING_MOVIES_BASE_URL}?api_key=${TMDB_API_KEY}`;
       axios.get(url).then((response) => {
         const movieData = response?.data?.results?.slice(0, 5);
         setMovies(
@@ -52,10 +55,16 @@ const Banner = () => {
                   {movies[currentIndex].title}
                 </div>
               </div>
-              <button className="absolute left-2 top-1/2 text-white bg-black/50 p-2" onClick={handlePrev}>
+              <button
+                className="absolute left-2 top-1/2 text-white bg-black/50 p-2 cursor-pointer"
+                onClick={handlePrev}
+              >
                 <ChevronLeft />
               </button>
-              <button className="absolute right-2 top-1/2 text-white bg-black/50 p-2" onClick={handleNext}>
+              <button
+                className="absolute right-2 top-1/2 text-white bg-black/50 p-2 cursor-pointer"
+                onClick={handleNext}
+              >
                 <ChevronRight />
               </button>
             </div>

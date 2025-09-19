@@ -1,6 +1,6 @@
 import React from "react";
 import Banner from "../components/Banner";
-import Movie from "../components/Movie";
+import Movie from "../features/Movie/Movie";
 
 const Home = () => {
   return (
