@@ -1,5 +1,5 @@
 import React from "react";
-import Banner from "../components/Banner";
+import Banner from "../features/Banner/Banner";
 import Movie from "../features/Movie/Movie";
 
 const Home = () => {

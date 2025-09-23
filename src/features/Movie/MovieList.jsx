@@ -1,40 +1,15 @@
 import { Heart, ThumbsDown } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MovieInfo from "./MovieInfo";
+import { MovieContext } from "../../context/MovieContextWrapper";
 
 const MovieList = ({ movies }) => {
-  const [watchList, setWatchList] = useState([]);
   const [openModel, setOpenModel] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-
-  useEffect(() => {
-    //Page refresh
-    const storedWatchList = localStorage.getItem("WatchList");
-    if (storedWatchList) {
-      setWatchList(JSON.parse(storedWatchList));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("WatchList", JSON.stringify(watchList));
-  }, [watchList]);
+  const { watchList, addToWatchList, removeFromWatchList } = useContext(MovieContext);
 
   const checkMovieInwatchList = (movie) => {
     return watchList.find((m) => m.id === movie.id) ? true : false;
-  };
-
-  const addToWatchList = (movie) => {
-    setWatchList((prevMovieList) => {
-      const updateList = [...prevMovieList, movie];
-      return updateList;
-    });
-  };
-
-  const removeFromWatchList = (movie) => {
-    setWatchList((prevMovieList) => {
-      const filteredWatchList = prevMovieList.filter((m) => m.id !== movie.id);
-      return filteredWatchList;
-    });
   };
 
   //for open movie details page
@@ -63,7 +38,7 @@ const MovieList = ({ movies }) => {
                   <div className="flex w-full justify-end">
                     {checkMovieInwatchList(movie) ? (
                       <div
-                        className="m-4 justify-center items-center bg-gray-900/50 rounded-2xl p-1 group cursor-pointer"
+                        className="relative m-4 justify-center items-center bg-gray-900/50 rounded-2xl p-1 group cursor-pointer"
                         onClick={() => removeFromWatchList(movie)}
                       >
                         <ThumbsDown
@@ -74,10 +49,13 @@ const MovieList = ({ movies }) => {
                           onMouseEnter={(e) => e.currentTarget.setAttribute("fill", "#f59105")}
                           onMouseLeave={(e) => e.currentTarget.setAttribute("fill", "none")}
                         />
+                        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                          Remove from watch list
+                        </span>
                       </div>
                     ) : (
                       <div
-                        className="m-4 justify-center items-center bg-gray-900/50 rounded-2xl p-1 group cursor-pointer"
+                        className="relative m-4 justify-center items-center bg-gray-900/50 rounded-2xl p-1 group cursor-pointer"
                         onClick={() => addToWatchList(movie)}
                       >
                         <Heart
@@ -87,10 +65,12 @@ const MovieList = ({ movies }) => {
                           className="transition-all"
                           fill="none"
                           style={{ transition: "fill 0.2s" }}
-                          // Tailwind can't handle hover:fill for SVG, so use group-hover with inline style
                           onMouseEnter={(e) => e.currentTarget.setAttribute("fill", "#ec0909")}
                           onMouseLeave={(e) => e.currentTarget.setAttribute("fill", "none")}
                         />
+                        <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                          Add to watch list
+                        </span>
                       </div>
                     )}
                   </div>
