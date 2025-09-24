@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
+import Snackbar from "../../components/Snackbar";
 
 const MovieInfo = ({ movie, handleCloseModel }) => {
   const { id, title, poster_path, overview, release_date, vote_average } = movie;
   const [loader, setLoader] = useState(false);
   const [trailerUrl, setTrailerUrl] = useState(null);
+  const [snackbar, setSnackbar] = useState(false);
 
   const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
 
@@ -23,13 +25,26 @@ const MovieInfo = ({ movie, handleCloseModel }) => {
           setTrailerUrl(`https://www.youtube.com/embed/${trailerObj.key}`);
         }
       } catch (error) {
-        console.log(error);
+        setSnackbar({ open: true, message: "Failed to load trailer. Please try again." });
       } finally {
         setLoader(false);
       }
     };
     fetchTrailer();
   }, []);
+  useEffect(() => {
+    let timer;
+    if (snackbar.open) {
+      timer = setTimeout(() => {
+        setSnackbar(false);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [snackbar.open]);
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(false);
+  };
 
   return (
     <div className="bg-white rounded-lg p-8 shadow-lg max-w-[35vw] max-h-[90vh] overflow-auto">
@@ -75,6 +90,14 @@ const MovieInfo = ({ movie, handleCloseModel }) => {
             Close
           </button>
         </>
+      )}
+      {snackbar && (
+        <Snackbar
+          open={snackbar.open}
+          message={snackbar.message}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={3000}
+        />
       )}
     </div>
   );

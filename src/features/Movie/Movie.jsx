@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
 import Pagination from "../../components/Pagination";
 import MovieList from "./MovieList";
+import Snackbar from "../../components/Snackbar";
 
 const Movie = () => {
   const [movies, setMovies] = useState([]);
   const [loader, setLoader] = useState(false);
   const [pageNo, setPageNo] = useState(1);
+  const [snackbar, setSnackbar] = useState(false);
 
   const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
   const TMDB_TRENDING_MOVIES_BASE_URL = import.meta.env.VITE_TRENDING_MOVIES_BASE_URL;
@@ -20,17 +22,31 @@ const Movie = () => {
         setMovies(movieData);
       });
     } catch (error) {
-      console.log(error);
+      setSnackbar({ open: true, message: "Failed to load movies. Please try again." });
     } finally {
       setLoader(false);
     }
   }, [pageNo]);
+
+  useEffect(() => {
+    let timer;
+    if (snackbar.open) {
+      timer = setTimeout(() => {
+        setSnackbar(false);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [snackbar.open]);
 
   const handlePrev = () => {
     setPageNo((prevPage) => (prevPage === 1 ? 1 : prevPage - 1));
   };
   const handleNext = () => {
     setPageNo((prevPage) => prevPage + 1);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(false);
   };
 
   return (
@@ -42,6 +58,14 @@ const Movie = () => {
           <div className="text-2xl font-bold text-center m-4">Trending Movies</div>
           <MovieList movies={movies} />
           <Pagination pageNo={pageNo} handleNext={handleNext} handlePrev={handlePrev} />
+          {snackbar && (
+            <Snackbar
+              open={snackbar.open}
+              message={snackbar.message}
+              onClose={handleCloseSnackbar}
+              autoHideDuration={3000}
+            />
+          )}
         </div>
       )}
     </>
