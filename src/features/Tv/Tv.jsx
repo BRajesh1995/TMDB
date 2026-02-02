@@ -2,31 +2,35 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Spinner from "../../components/Spinner";
 import Pagination from "../../components/Pagination";
-import MovieList from "./MovieList";
+import TvList from "./TvList";
 import Snackbar from "../../components/Snackbar";
 
-const Movie = () => {
-  const [movies, setMovies] = useState([]);
+const TV = () => {
+  const [shows, setShows] = useState([]);
   const [loader, setLoader] = useState(false);
   const [pageNo, setPageNo] = useState(1);
   const [snackbar, setSnackbar] = useState(false);
 
   const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
-  const TMDB_TRENDING_MOVIES_BASE_URL = import.meta.env.VITE_TRENDING_MOVIES_BASE_URL;
+  // Using the discovered URL provided by user or standard discover endpoint
+  const TMDB_TV_URL = "https://api.themoviedb.org/3/discover/tv";
+
   useEffect(() => {
-    try {
-      setLoader(true);
-      const url = `${TMDB_TRENDING_MOVIES_BASE_URL}?api_key=${TMDB_API_KEY}&language=en-US&page=${pageNo}`;
-      axios.get(url).then((response) => {
-        const movieData = response?.data?.results;
-        setMovies(movieData);
-      });
-    } catch (error) {
-      setSnackbar({ open: true, message: "Failed to load movies. Please try again." });
-    } finally {
-      setLoader(false);
-    }
-  }, [pageNo]);
+    const fetchTvShows = async () => {
+      try {
+        setLoader(true);
+        const url = `${TMDB_TV_URL}?api_key=${TMDB_API_KEY}&language=en-US&page=${pageNo}`;
+        const response = await axios.get(url);
+        const tvData = response?.data?.results;
+        setShows(tvData);
+      } catch (error) {
+        setSnackbar({ open: true, message: "Failed to load TV shows. Please try again." });
+      } finally {
+        setLoader(false);
+      }
+    };
+    fetchTvShows();
+  }, [pageNo, TMDB_API_KEY]);
 
   useEffect(() => {
     let timer;
@@ -55,8 +59,8 @@ const Movie = () => {
         <Spinner />
       ) : (
         <div className="pb-24">
-          <div className="text-2xl font-bold text-center m-4">Trending Movies</div>
-          <MovieList movies={movies} />
+          <div className="text-2xl font-bold text-center m-4">Trending TV Shows</div>
+          <TvList shows={shows} />
           <Pagination pageNo={pageNo} handleNext={handleNext} handlePrev={handlePrev} />
           {snackbar && (
             <Snackbar
@@ -72,4 +76,4 @@ const Movie = () => {
   );
 };
 
-export default Movie;
+export default TV;

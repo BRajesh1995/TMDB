@@ -4,38 +4,38 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Spinner from "../../components/Spinner";
 import Snackbar from "../../components/Snackbar";
 
-const Banner = () => {
-  const [movies, setMovies] = useState([]);
+const TvBanner = () => {
+  const [shows, setShows] = useState([]);
   const [loader, setLoader] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [snackbar, setSnackbar] = useState(false);
 
   const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
-  const TMDB_TRENDING_MOVIES_BASE_URL = import.meta.env.VITE_TRENDING_MOVIES_BASE_URL;
+  const TMDB_TRENDING_TV_URL = "https://api.themoviedb.org/3/trending/tv/day";
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchTrendingShows = async () => {
       setLoader(true);
       try {
-        const url = `${TMDB_TRENDING_MOVIES_BASE_URL}?api_key=${TMDB_API_KEY}`;
+        const url = `${TMDB_TRENDING_TV_URL}?api_key=${TMDB_API_KEY}`;
         const response = await axios.get(url);
-        const movieData = response?.data?.results?.slice(0, 5);
-        setMovies(
-          movieData.map((movie) => ({
-            title: movie?.title,
-            bannerImage: `https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`,
+        const tvData = response?.data?.results?.slice(0, 5);
+        setShows(
+          tvData.map((show) => ({
+            name: show?.name || show?.original_name, // TV shows typically use 'name'
+            bannerImage: `https://image.tmdb.org/t/p/original/${show?.backdrop_path}`,
           }))
         );
       } catch (error) {
-        setSnackbar({ open: true, message: "Failed to load movies. Please try again." });
+        setSnackbar({ open: true, message: "Failed to load trending TV shows. Please try again." });
       } finally {
         setLoader(false);
       }
     };
-    fetchMovies();
-  }, []);
+    fetchTrendingShows();
+  }, [TMDB_API_KEY]);
 
-  // Automatically close snackbar after 3 seconds when open
+  // Automatically close snackbar after 5 seconds when open
   useEffect(() => {
     let timer;
     if (snackbar.open) {
@@ -48,20 +48,20 @@ const Banner = () => {
 
   // Auto-scroll effect
   useEffect(() => {
-    if (movies.length === 0) return;
+    if (shows.length === 0) return;
 
     const intervalId = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % shows.length);
     }, 5000);
 
     return () => clearInterval(intervalId);
-  }, [movies.length]);
+  }, [shows.length]);
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? movies.length - 1 : prevIndex - 1));
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? shows.length - 1 : prevIndex - 1));
   };
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % shows.length);
   };
 
   const handleCloseSnackbar = () => {
@@ -74,21 +74,21 @@ const Banner = () => {
         <Spinner />
       ) : (
         <>
-          {movies?.length > 0 && (
+          {shows?.length > 0 && (
             <div className="relative h-[50vh] overflow-hidden group">
               {/* Carousel Track */}
               <div 
                 className="flex h-full transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
               >
-                {movies.map((movie, index) => (
+                {shows.map((show, index) => (
                   <div
                     key={index}
                     className="min-w-full h-full bg-cover bg-center flex items-end relative"
-                    style={{ backgroundImage: `url(${movie?.bannerImage})` }}
+                    style={{ backgroundImage: `url(${show?.bannerImage})` }}
                   >
                     <div className="text-white w-full text-center text-2xl p-4 bg-gradient-to-t from-black/80 to-transparent pb-8">
-                      {movie.title}
+                      {show.name}
                     </div>
                   </div>
                 ))}
@@ -123,4 +123,4 @@ const Banner = () => {
   );
 };
 
-export default Banner;
+export default TvBanner;
