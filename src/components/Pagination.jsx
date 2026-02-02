@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import React, { useState } from "react";
+
 
 const Pagination = ({ pageNo, handleNext, handlePrev }) => {
   return (

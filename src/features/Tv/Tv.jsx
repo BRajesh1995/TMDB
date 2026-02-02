@@ -5,15 +5,18 @@ import Pagination from "../../components/Pagination";
 import TvList from "./TvList";
 import Snackbar from "../../components/Snackbar";
 
+import { useSearchParams } from "react-router-dom";
+
 const TV = () => {
   const [shows, setShows] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [pageNo, setPageNo] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageNo = parseInt(searchParams.get("page") || "1");
   const [snackbar, setSnackbar] = useState(false);
 
   const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
   // Using the discovered URL provided by user or standard discover endpoint
-  const TMDB_TV_URL = "https://api.themoviedb.org/3/discover/tv";
+  const TMDB_TV_URL = import.meta.env.VITE_TV_SHOWS_BASE_URL;
 
   useEffect(() => {
     const fetchTvShows = async () => {
@@ -43,10 +46,12 @@ const TV = () => {
   }, [snackbar.open]);
 
   const handlePrev = () => {
-    setPageNo((prevPage) => (prevPage === 1 ? 1 : prevPage - 1));
+      if (pageNo > 1) {
+          setSearchParams({ page: pageNo - 1 });
+      }
   };
   const handleNext = () => {
-    setPageNo((prevPage) => prevPage + 1);
+      setSearchParams({ page: pageNo + 1 });
   };
 
   const handleCloseSnackbar = () => {

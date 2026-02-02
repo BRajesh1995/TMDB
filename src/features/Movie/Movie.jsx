@@ -5,14 +5,18 @@ import Pagination from "../../components/Pagination";
 import MovieList from "./MovieList";
 import Snackbar from "../../components/Snackbar";
 
+import { useSearchParams } from "react-router-dom";
+
 const Movie = () => {
   const [movies, setMovies] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [pageNo, setPageNo] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageNo = parseInt(searchParams.get("page") || "1");
   const [snackbar, setSnackbar] = useState(false);
 
   const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
   const TMDB_TRENDING_MOVIES_BASE_URL = import.meta.env.VITE_TRENDING_MOVIES_BASE_URL;
+  
   useEffect(() => {
     try {
       setLoader(true);
@@ -39,10 +43,12 @@ const Movie = () => {
   }, [snackbar.open]);
 
   const handlePrev = () => {
-    setPageNo((prevPage) => (prevPage === 1 ? 1 : prevPage - 1));
+      if (pageNo > 1) {
+          setSearchParams({ page: pageNo - 1 });
+      }
   };
   const handleNext = () => {
-    setPageNo((prevPage) => prevPage + 1);
+      setSearchParams({ page: pageNo + 1 });
   };
 
   const handleCloseSnackbar = () => {
