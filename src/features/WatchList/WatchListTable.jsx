@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import genreids from "../../helpers/GenreIds";
 import { ArrowUpDown, Trash2 } from "lucide-react";
-import MovieRecommend from "./MovieRecommend";
-import { MovieContext } from "../../context/MovieContextWrapper";
+
+import { MovieContext } from "../../context/MovieContext";
 
 const WatchListTable = () => {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const { watchList, setWatchList, removeFromWatchList } = useContext(MovieContext);
 
@@ -34,11 +34,11 @@ const WatchListTable = () => {
         Recommend Movies
       </button> */}
 
-      {showModal && <MovieRecommend watchList={watchList} />}
+      {/* {showModal && <MovieRecommend watchList={watchList} />} */}
       <div className="flex justify-center mb-5">
         <input
           type="text"
-          placeholder="Search by movie name"
+          placeholder="Search by name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="h-[3rem] w-[18rem] px-4 outline-none border border-slate-700 rounded-lg bg-gray-300"
@@ -65,36 +65,39 @@ const WatchListTable = () => {
         <tbody>
           {watchList?.length > 0 &&
             watchList
-              .filter((movie) => {
-                return movie?.title?.toLowerCase().trim().includes(search.toLowerCase());
+              .filter((item) => {
+                const title = item.title || item.name;
+                return title?.toLowerCase().trim().includes(search.toLowerCase());
               })
-              .map((movie, idx) => {
+              .map((item, idx) => {
+                const title = item.title || item.name;
+                const date = item.release_date || item.first_air_date;
                 return (
                   <tr key={idx} className="border-b border-gray-200 hover:bg-gray-100 ">
                     <td className="p-5">
                       <img
-                        src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`}
-                        alt={movie?.title}
-                        className="h-20"
+                        src={`https://image.tmdb.org/t/p/w500${item?.poster_path}`}
+                        alt={title}
+                        className="h-20 w-16 object-cover rounded"
                       />
                     </td>
-                    <td className="p-5 flex items-center">{movie?.title}</td>
-                    <td className="p-5 ">{movie?.vote_average}</td>
-                    <td className="p-5">{movie?.popularity}</td>
+                    <td className="p-5 flex items-center">{title}</td>
+                    <td className="p-5 ">{item?.vote_average ? item.vote_average.toFixed(1) : "N/A"}</td>
+                    <td className="p-5">{item?.popularity ? item.popularity.toFixed(0) : "N/A"}</td>
                     <td className="p-5">
-                      {movie?.genre_ids
+                      {item?.genre_ids
                         ?.map((id) => genreids[id])
                         .filter(Boolean)
                         .join(", ")}
                     </td>
-                    <td className="p-5">{movie?.release_date}</td>
+                    <td className="p-5">{date}</td>
                     <td className="p-5">
                       <button
-                        className="text-red-500 cursor-pointer"
-                        onClick={() => removeFromWatchList(movie)}
+                        className="text-red-500 cursor-pointer hover:bg-red-100 p-2 rounded-full transition-colors"
+                        onClick={() => removeFromWatchList(item)}
                         title="Remove"
                       >
-                        <Trash2 size={16} color="#ff0000" />
+                        <Trash2 size={18} color="#ff0000" />
                         <span className="sr-only">Remove</span>
                       </button>
                     </td>
