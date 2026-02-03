@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { MovieContext } from "../../context/MovieContextWrapper";
+import { MovieContext } from "../../context/MovieContext";
 import MediaCard from "../../components/MediaCard";
 import MediaDetailsModal from "../../components/MediaDetailsModal";
 
@@ -29,7 +29,7 @@ const MovieList = ({ movies }) => {
 
   return (
     <>
-      <div className="flex justify-evenly flex-wrap gap-8">
+      <div className="flex justify-evenly flex-wrap gap-8" data-testid="movie-list">
         {movies?.length > 0 &&
           movies.map((movie, index) => {
             return (

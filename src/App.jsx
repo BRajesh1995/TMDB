@@ -34,7 +34,7 @@ function App() {
     <>
       <MovieContextWrapper>
         <NavBar />
-        <div className="pt-20">
+        <main className="pt-20">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
@@ -42,7 +42,7 @@ function App() {
             <Route path="/tv" element={<TvPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
-        </div>
+        </main>
       </MovieContextWrapper>
     </>
   );

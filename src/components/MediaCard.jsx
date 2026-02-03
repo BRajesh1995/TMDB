@@ -15,12 +15,14 @@ const MediaCard = ({ data, isInWatchList, onToggleWatchList, onClick }) => {
       <div className="absolute inset-0 bg-black/30 rounded-xl group-hover/card:bg-black/50 transition-colors pointer-events-none" />
       
       <div className="flex w-full justify-end z-10">
-        <div
-          className="relative m-4 justify-center items-center bg-gray-900/50 rounded-2xl p-1 group cursor-pointer hover:bg-gray-900/80 transition-colors"
+        <button
+          type="button"
+          className="relative m-4 flex justify-center items-center bg-gray-900/50 rounded-2xl p-1 group cursor-pointer hover:bg-gray-900/80 transition-colors"
           onClick={(e) => {
             e.stopPropagation();
             onToggleWatchList(data);
           }}
+          aria-label={isInWatchList ? "Remove from watchlist" : "Add to watchlist"}
         >
           {isInWatchList ? (
             <>
@@ -32,7 +34,7 @@ const MediaCard = ({ data, isInWatchList, onToggleWatchList, onClick }) => {
                 onMouseEnter={(e) => e.currentTarget.setAttribute("fill", "#f59105")}
                 onMouseLeave={(e) => e.currentTarget.setAttribute("fill", "none")}
               />
-              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
                 Remove from watchlist
               </span>
             </>
@@ -48,12 +50,12 @@ const MediaCard = ({ data, isInWatchList, onToggleWatchList, onClick }) => {
                 onMouseEnter={(e) => e.currentTarget.setAttribute("fill", "#ec0909")}
                 onMouseLeave={(e) => e.currentTarget.setAttribute("fill", "none")}
               />
-              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+              <span className="absolute left-1/2 -translate-x-1/2 top-full mt-2 px-2 py-1 rounded bg-black text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
                 Add to watchlist
               </span>
             </>
           )}
-        </div>
+        </button>
       </div>
 
       <div

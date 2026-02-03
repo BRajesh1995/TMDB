@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-// 1st we need to crate the object
-export const MovieContext = React.createContext();
+import { MovieContext } from "./MovieContext";
 
 const MovieContextWrapper = ({ children }) => {
   const [watchList, setWatchList] = useState([]);

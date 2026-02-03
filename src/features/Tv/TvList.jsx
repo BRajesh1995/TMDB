@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { MovieContext } from "../../context/MovieContextWrapper";
+import { MovieContext } from "../../context/MovieContext";
 import MediaCard from "../../components/MediaCard";
 import MediaDetailsModal from "../../components/MediaDetailsModal";
 

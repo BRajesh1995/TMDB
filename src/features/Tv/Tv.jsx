@@ -15,7 +15,6 @@ const TV = () => {
   const [snackbar, setSnackbar] = useState(false);
 
   const TMDB_API_KEY = import.meta.env.VITE_API_KEY;
-  // Using the discovered URL provided by user or standard discover endpoint
   const TMDB_TV_URL = import.meta.env.VITE_TV_SHOWS_BASE_URL;
 
   useEffect(() => {
@@ -27,13 +26,14 @@ const TV = () => {
         const tvData = response?.data?.results;
         setShows(tvData);
       } catch (error) {
+        console.log(error);
         setSnackbar({ open: true, message: "Failed to load TV shows. Please try again." });
       } finally {
         setLoader(false);
       }
     };
     fetchTvShows();
-  }, [pageNo, TMDB_API_KEY]);
+  }, [pageNo, TMDB_API_KEY, TMDB_TV_URL]);
 
   useEffect(() => {
     let timer;

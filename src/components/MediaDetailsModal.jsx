@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
 import Snackbar from "./Snackbar";
 import { X } from "lucide-react";
@@ -37,6 +37,7 @@ const MediaDetailsModal = ({ type, id, onClose }) => {
           setTrailerUrl(`https://www.youtube.com/embed/${trailerObj.key}`);
         }
       } catch (error) {
+        console.log(error);
         setSnackbar({ open: true, message: "Failed to load details. Please try again." });
       } finally {
         setLoader(false);
@@ -64,6 +65,7 @@ const MediaDetailsModal = ({ type, id, onClose }) => {
         <button 
             onClick={onClose}
             className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors"
+            aria-label="Close Modal"
         >
             <X size={20} />
         </button>

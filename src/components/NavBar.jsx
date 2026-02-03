@@ -17,7 +17,7 @@ const NavBar = () => {
   const navLinks = [
     { to: "/home", label: "Home" },
     { to: "/watchList", label: "WatchList" },
-    { to: "/tv", label: "TV" },
+    { to: "/tv", label: "TV Shows" },
   ];
 
   return (
@@ -32,9 +32,11 @@ const NavBar = () => {
                 alt="Logo" 
                 className="h-8 w-8 transition-transform duration-300 group-hover:rotate-180" 
               />
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent tracking-wide">
-                TMDB
-              </span>
+              <img 
+                src="/TMDB_Nav.svg" 
+                alt="TMDB" 
+                className="h-6 w-auto" 
+              />
             </NavLink>
           </div>
 

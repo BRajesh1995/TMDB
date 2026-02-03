@@ -26,11 +26,12 @@ const Movie = () => {
         setMovies(movieData);
       });
     } catch (error) {
+      console.log(error);
       setSnackbar({ open: true, message: "Failed to load movies. Please try again." });
     } finally {
       setLoader(false);
     }
-  }, [pageNo]);
+  }, [pageNo, TMDB_API_KEY, TMDB_TRENDING_MOVIES_BASE_URL]);
 
   useEffect(() => {
     let timer;

@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import genreids from "../../helpers/GenreIds";
 import { ArrowUpDown, Trash2 } from "lucide-react";
-import MovieRecommend from "./MovieRecommend";
-import { MovieContext } from "../../context/MovieContextWrapper";
+
+import { MovieContext } from "../../context/MovieContext";
 
 const WatchListTable = () => {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   const { watchList, setWatchList, removeFromWatchList } = useContext(MovieContext);
 
@@ -34,7 +34,7 @@ const WatchListTable = () => {
         Recommend Movies
       </button> */}
 
-      {showModal && <MovieRecommend watchList={watchList} />}
+      {/* {showModal && <MovieRecommend watchList={watchList} />} */}
       <div className="flex justify-center mb-5">
         <input
           type="text"
