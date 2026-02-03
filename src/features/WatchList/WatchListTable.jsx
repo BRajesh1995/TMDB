@@ -44,7 +44,7 @@ const WatchListTable = () => {
           className="h-[3rem] w-[18rem] px-4 outline-none border border-slate-700 rounded-lg bg-gray-300"
         />
       </div>
-      <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
+      <table className="hidden md:table w-full border-collapse bg-white text-left text-sm text-gray-500">
         <thead>
           <tr className="bg-gray-300">
             <th className="px-6 py-4 font-bold text-gray-900">Poster</th>
@@ -106,6 +106,52 @@ const WatchListTable = () => {
               })}
         </tbody>
       </table>
+
+      {/* Mobile View */}
+      <div className="md:hidden flex flex-col gap-4">
+        {watchList?.length > 0 &&
+          watchList
+            .filter((item) => {
+              const title = item.title || item.name;
+              return title?.toLowerCase().trim().includes(search.toLowerCase());
+            })
+            .map((item, idx) => {
+              const title = item.title || item.name;
+              const date = item.release_date || item.first_air_date;
+              return (
+                <div key={idx} className="flex border border-gray-200 rounded-lg p-3 shadow-sm bg-white gap-4">
+                  <img
+                     src={`https://image.tmdb.org/t/p/w500${item?.poster_path}`}
+                     alt={title}
+                     className="h-32 w-24 object-cover rounded flex-shrink-0"
+                  />
+                  <div className="flex flex-col flex-1 justify-between">
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
+                      <div className="text-sm text-gray-600 mb-1">
+                         <span className="font-semibold">Rating:</span> {item?.vote_average ? item.vote_average.toFixed(1) : "N/A"}
+                      </div>
+                       <div className="text-sm text-gray-600 mb-1">
+                         <span className="font-semibold">Genre:</span> {item?.genre_ids?.map((id) => genreids[id]).filter(Boolean).join(", ")}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {date}
+                      </div>
+                    </div>
+                    <div className="flex justify-end mt-2">
+                       <button
+                        className="text-red-500 cursor-pointer hover:bg-red-50 p-2 rounded-full transition-colors flex items-center gap-1"
+                        onClick={() => removeFromWatchList(item)}
+                      >
+                         <Trash2 size={18} />
+                         <span className="text-sm font-medium">Remove</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+      </div>
     </div>
   );
 };

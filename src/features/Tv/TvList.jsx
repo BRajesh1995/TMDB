@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
+import { useSearchParams } from "react-router-dom";
 import { MovieContext } from "../../context/MovieContext";
 import MediaCard from "../../components/MediaCard";
 import MediaDetailsModal from "../../components/MediaDetailsModal";
 
 const TvList = ({ shows }) => {
-  const [selectedShowId, setSelectedShowId] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedShowId = searchParams.get("id");
   const { watchList, addToWatchList, removeFromWatchList } = useContext(MovieContext);
 
   const checkShowInWatchList = (show) => {
@@ -20,11 +22,15 @@ const TvList = ({ shows }) => {
   };
 
   const handleOpenDetails = (show) => {
-    setSelectedShowId(show.id);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("id", show.id);
+    setSearchParams(newParams);
   };
 
   const handleCloseModal = () => {
-    setSelectedShowId(null);
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete("id");
+    setSearchParams(newParams);
   };
 
   return (

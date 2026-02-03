@@ -9,8 +9,9 @@ const MediaCard = ({ data, isInWatchList, onToggleWatchList, onClick }) => {
     : "https://via.placeholder.com/500x281?text=No+Image";
 
   return (
-    <div className="h-[45vh] w-[180px] bg-center bg-cover rounded-xl flex flex-col justify-between items-center relative group/card shadow-lg transition-transform hover:scale-105 duration-300"
+    <div className="h-[45vh] w-[180px] bg-center bg-cover rounded-xl flex flex-col justify-between items-center relative group/card shadow-lg transition-transform hover:scale-105 duration-300 cursor-pointer"
       style={{ backgroundImage: `url(${imagePath})` }}
+      onClick={onClick}
     >
       <div className="absolute inset-0 bg-black/30 rounded-xl group-hover/card:bg-black/50 transition-colors pointer-events-none" />
       
@@ -59,8 +60,7 @@ const MediaCard = ({ data, isInWatchList, onToggleWatchList, onClick }) => {
       </div>
 
       <div
-        className="text-white w-full bg-gray-900/80 text-center rounded-b-xl p-2 hover:cursor-pointer break-words backdrop-blur-sm z-10"
-        onClick={onClick}
+        className="text-white w-full bg-gray-900/80 text-center rounded-b-xl p-2 break-words backdrop-blur-sm z-10"
       >
         <div className="font-semibold text-sm line-clamp-2">{displayTitle}</div>
       </div>
